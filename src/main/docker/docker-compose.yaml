@@ -40,14 +40,9 @@ services:
       - ROCKETMQ_CONFIG_PROXYADDRS=192.168.0.60:9870,192.168.0.61:9870,192.168.0.62:9870,192.168.0.63:9870,192.168.0.64:9870,192.168.0.65:9870
       # JVM 参数
       - JAVA_OPTS=-Dfile.encoding=UTF-8 -Xms512m -Xmx512m
-      # 外部配置文件目录
-      - CONFIG_DIR=/home/rocketmq-dashboard/config
     volumes:
-      # 数据目录 (dashboard 监控数据)
+      # 数据目录 (包含 users.properties 用户配置文件)
       - /home/ygj/rocketmq-dashboard/data:/tmp/rocketmq-console/data:rw
-      # 外部配置文件目录 (可选，用于覆盖 JAR 内置配置)
-      # 支持的文件: application.yml, logback.xml, role-permission.yml, users.properties, rmqcngkeystore.jks
-      - /home/ygj/rocketmq-dashboard/config:/home/rocketmq-dashboard/config:ro
       # 时区同步
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
