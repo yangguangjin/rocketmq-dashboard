@@ -36,7 +36,7 @@ spring:
   security:
     user:
       name: admin
-      password: 123456
+      password: JGds23GhsdfJG329AA3H523klo
       roles: ADMIN
 
 management:
