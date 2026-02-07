@@ -25,6 +25,13 @@ import {LanguageProvider} from "./i18n/LanguageContext";
 import {Provider} from "react-redux";
 import store from './store';
 
+// 全局禁用 DatePicker 弹出层的滚轮事件，防止鼠标滚动导致年份/月份意外变化
+document.addEventListener('wheel', (e) => {
+    if (e.target.closest('.ant-picker-dropdown')) {
+        e.preventDefault();
+    }
+}, {passive: false});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <LanguageProvider>
