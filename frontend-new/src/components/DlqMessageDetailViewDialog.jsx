@@ -17,7 +17,7 @@
 
 import React from 'react';
 import {Form, Input, Typography} from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {useLanguage} from '../i18n/LanguageContext'; // 根据实际路径调整
 
 const {Text} = Typography;
@@ -53,7 +53,7 @@ const DlqMessageDetailViewDialog = ({ngDialogData}) => {
                     <Text strong>{messageView.properties?.KEYS}</Text>
                 </Form.Item>
                 <Form.Item label="Storetime:">
-                    <Text strong>{moment(messageView.storeTimestamp).format('YYYY-MM-DD HH:mm:ss')}</Text>
+                    <Text strong>{dayjs(messageView.storeTimestamp).format('YYYY-MM-DD HH:mm:ss')}</Text>
                 </Form.Item>
                 <Form.Item label="StoreHost:">
                     <Text strong>{messageView.storeHost}</Text>

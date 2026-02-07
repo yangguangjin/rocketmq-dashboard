@@ -17,7 +17,7 @@
 
 import React from 'react';
 import {Button, Descriptions, Modal, notification, Spin, Tag, Typography} from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {SyncOutlined} from '@ant-design/icons';
 import {useLanguage} from '../i18n/LanguageContext';
 import {remoteApi} from '../api/remoteApi/remoteApi'; // 确保这个路径正确
@@ -106,10 +106,10 @@ const MessageDetailViewDialog = ({visible, onCancel, messageId, topic, onResendM
                                 label="StoreHost">{messageDetail.messageView.storeHost}</Descriptions.Item>
                             <Descriptions.Item label="BornHost">{messageDetail.messageView.bornHost}</Descriptions.Item>
                             <Descriptions.Item label="StoreTime">
-                                {moment(messageDetail.messageView.storeTimestamp).format("YYYY-MM-DD HH:mm:ss")}
+                                {dayjs(messageDetail.messageView.storeTimestamp).format("YYYY-MM-DD HH:mm:ss")}
                             </Descriptions.Item>
                             <Descriptions.Item label="BornTime">
-                                {moment(messageDetail.messageView.bornTimestamp).format("YYYY-MM-DD HH:mm:ss")}
+                                {dayjs(messageDetail.messageView.bornTimestamp).format("YYYY-MM-DD HH:mm:ss")}
                             </Descriptions.Item>
                             <Descriptions.Item label="Queue ID">{messageDetail.messageView.queueId}</Descriptions.Item>
                             <Descriptions.Item

@@ -30,7 +30,7 @@ import {
     Tabs,
     Typography
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {ExportOutlined, SearchOutlined, SendOutlined} from '@ant-design/icons';
 import DlqMessageDetailViewDialog from "../../components/DlqMessageDetailViewDialog"; // Ensure this path is correct
 import {useLanguage} from '../../i18n/LanguageContext'; // Ensure this path is correct
@@ -52,8 +52,8 @@ const DlqMessageQueryPage = () => {
     // Consumer 查询状态
     const [allConsumerGroupList, setAllConsumerGroupList] = useState([]);
     const [selectedConsumerGroup, setSelectedConsumerGroup] = useState(null);
-    const [timepickerBegin, setTimepickerBegin] = useState(moment().subtract(3, 'hour')); // 默认三小时前
-    const [timepickerEnd, setTimepickerEnd] = useState(moment());
+    const [timepickerBegin, setTimepickerBegin] = useState(dayjs().subtract(3, 'hour')); // 默认三小时前
+    const [timepickerEnd, setTimepickerEnd] = useState(dayjs());
     const [messageShowList, setMessageShowList] = useState([]);
     const [paginationConf, setPaginationConf] = useState({
         current: 1,
@@ -117,7 +117,7 @@ const DlqMessageQueryPage = () => {
             });
             return;
         }
-        if (moment(timepickerEnd).valueOf() < moment(timepickerBegin).valueOf()) {
+        if (dayjs(timepickerEnd).valueOf() < dayjs(timepickerBegin).valueOf()) {
             notificationApi.error({message: t.END_TIME_LATER_THAN_BEGIN_TIME, delay: 2000});
             return;
         }
@@ -127,8 +127,8 @@ const DlqMessageQueryPage = () => {
         try {
             const resp = await remoteApi.queryDlqMessageByConsumerGroup(
                 selectedConsumerGroup,
-                moment(timepickerBegin).valueOf(),
-                moment(timepickerEnd).valueOf(),
+                dayjs(timepickerBegin).valueOf(),
+                dayjs(timepickerEnd).valueOf(),
                 page,
                 pageSize,
                 taskId
@@ -480,7 +480,7 @@ const DlqMessageQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
+            render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
             title: 'Operation',
@@ -520,7 +520,7 @@ const DlqMessageQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
+            render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
             title: 'Operation',

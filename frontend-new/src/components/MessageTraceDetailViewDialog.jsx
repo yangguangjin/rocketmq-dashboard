@@ -17,7 +17,7 @@
 
 import React, {useEffect, useRef} from 'react';
 import {Collapse, Form, Input, Table, Tag, Typography} from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {useLanguage} from '../i18n/LanguageContext';
 import Paragraph from "antd/es/skeleton/Paragraph";
 import * as echarts from 'echarts'; // Import ECharts
@@ -130,7 +130,7 @@ const MessageTraceDetailViewDialog = ({ngDialogData}) => {
                 if (timestamp < 0) {
                     return 'N/A';
                 }
-                return moment(timestamp).format(TIME_FORMAT_PATTERN);
+                return dayjs(timestamp).format(TIME_FORMAT_PATTERN);
             }
 
             function formatNodeToolTip(params) {
@@ -329,7 +329,7 @@ const MessageTraceDetailViewDialog = ({ngDialogData}) => {
             dataIndex: 'beginTimestamp',
             key: 'beginTimestamp',
             align: 'center',
-            render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss.SSS')
+            render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss.SSS')
         },
         {
             title: t.TRANSACTION_STATE,
@@ -356,14 +356,14 @@ const MessageTraceDetailViewDialog = ({ngDialogData}) => {
             dataIndex: 'beginTimestamp',
             key: 'beginTimestamp',
             align: 'center',
-            render: (text) => text < 0 ? 'N/A' : moment(text).format('YYYY-MM-DD HH:mm:ss.SSS')
+            render: (text) => text < 0 ? 'N/A' : dayjs(text).format('YYYY-MM-DD HH:mm:ss.SSS')
         },
         {
             title: t.END_TIMESTAMP,
             dataIndex: 'endTimestamp',
             key: 'endTimestamp',
             align: 'center',
-            render: (text) => text < 0 ? 'N/A' : moment(text).format('YYYY-MM-DD HH:mm:ss.SSS')
+            render: (text) => text < 0 ? 'N/A' : dayjs(text).format('YYYY-MM-DD HH:mm:ss.SSS')
         },
         {
             title: t.COST_TIME,
@@ -463,12 +463,12 @@ const MessageTraceDetailViewDialog = ({ngDialogData}) => {
 
                                         <Form.Item label={<Text strong>{t.BEGIN_TIMESTAMP}</Text>}>
                                             <Input
-                                                value={moment(producerNode.traceNode.beginTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS')}
+                                                value={dayjs(producerNode.traceNode.beginTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS')}
                                                 readOnly/>
                                         </Form.Item>
                                         <Form.Item label={<Text strong>{t.END_TIMESTAMP}</Text>}>
                                             <Input
-                                                value={moment(producerNode.traceNode.endTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS')}
+                                                value={dayjs(producerNode.traceNode.endTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS')}
                                                 readOnly/>
                                         </Form.Item>
                                         <Form.Item label={<Text strong>{t.COST_TIME}</Text>}>

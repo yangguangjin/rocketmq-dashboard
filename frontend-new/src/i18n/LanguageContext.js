@@ -19,15 +19,15 @@ import React, {createContext, useContext, useState} from 'react';
 import {translations} from '../i18n';
 
 const LanguageContext = createContext({
-    lang: 'en',
+    lang: 'zh',
     setLang: () => {
     },
-    t: translations['en'], // 当前语言的文本资源
+    t: translations['zh'], // 当前语言的文本资源
 });
 
 export const LanguageProvider = ({children}) => {
-    const [lang, setLang] = useState('en');
-    const t = translations[lang] || translations['en'];
+    const [lang, setLang] = useState('zh');
+    const t = translations[lang] || translations['zh'];
     return (
         <LanguageContext.Provider value={{lang, setLang, t}}>
             {children}

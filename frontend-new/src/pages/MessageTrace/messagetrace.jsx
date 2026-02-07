@@ -17,7 +17,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Form, Input, notification, Select, Spin, Table, Tabs, Typography} from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {SearchOutlined} from '@ant-design/icons';
 import {useLanguage} from '../../i18n/LanguageContext';
 import MessageTraceDetailViewDialog from "../../components/MessageTraceDetailViewDialog";
@@ -211,7 +211,7 @@ const MessageTraceQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
+            render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
         },
         {
             title: 'Operation',
@@ -236,7 +236,7 @@ const MessageTraceQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
+            render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
         },
         {
             title: 'Operation',

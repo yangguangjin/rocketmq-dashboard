@@ -18,7 +18,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Card, Col, DatePicker, message, notification, Row, Select, Spin, Table} from 'antd';
 import * as echarts from 'echarts';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {useLanguage} from '../../i18n/LanguageContext';
 import {remoteApi, tools} from '../../api/remoteApi/remoteApi';
 
@@ -32,7 +32,7 @@ const DashboardPage = () => {
     const topicLineChartRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
-    const [date, setDate] = useState(moment());
+    const [date, setDate] = useState(dayjs());
     const [topicNames, setTopicNames] = useState([]);
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [brokerTableData, setBrokerTableData] = useState([]);
@@ -54,13 +54,19 @@ const DashboardPage = () => {
                 tooltip: {},
                 legend: {data: ['TotalMsg']},
                 axisPointer: {type: 'shadow'},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                },
                 xAxis: {
                     type: 'category',
                     data: [],
                     axisLabel: {
                         inside: false,
                         color: '#000000',
-                        rotate: 0,
+                        rotate: 30,
                         interval: 0
                     },
                     axisTick: {show: true},
@@ -150,7 +156,7 @@ const DashboardPage = () => {
             values.forEach(tpsValue => {
                 const tpsArray = tpsValue.split(",");
                 if (isFirstSeries) {
-                    xAxisData.push(moment(parseInt(tpsArray[0])).format("HH:mm:ss"));
+                    xAxisData.push(dayjs(parseInt(tpsArray[0])).format("HH:mm:ss"));
                 }
                 tpsValues.push(parseFloat(tpsArray[1]));
             });
@@ -183,7 +189,7 @@ const DashboardPage = () => {
             values.forEach(tpsValue => {
                 const tpsArray = tpsValue.split(",");
                 if (isFirstSeries) {
-                    xAxisData.push(moment(parseInt(tpsArray[0])).format("HH:mm:ss"));
+                    xAxisData.push(dayjs(parseInt(tpsArray[0])).format("HH:mm:ss"));
                 }
                 tpsValues.push(parseFloat(tpsArray[2]));
             });
@@ -206,7 +212,7 @@ const DashboardPage = () => {
     }, []);
 
     const queryLineData = useCallback(async () => {
-        const _date = date ? date.format("YYYY-MM-DD") : moment().format("YYYY-MM-DD");
+        const _date = date ? date.format("YYYY-MM-DD") : dayjs().format("YYYY-MM-DD");
 
         lineChartInstance.current?.showLoading();
         await remoteApi.queryBrokerHisData(_date, (resp) => {
@@ -270,7 +276,7 @@ const DashboardPage = () => {
                 const xAxisData = [];
                 const data = [];
                 brokerArray.slice(0, 10).forEach(broker => {
-                    xAxisData.push(`${broker.brokerName}:${broker.index}`);
+                    xAxisData.push(`${broker.brokerName}:${broker.brokerId}`);
                     data.push(parseFloat(broker.msgGetTotalTodayNow || 0));
                 });
                 barChartInstance.current?.setOption(getBrokerBarChartOp(xAxisData, data));
@@ -313,13 +319,26 @@ const DashboardPage = () => {
                 });
 
                 const option = {
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '35%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {type: 'shadow'}
+                    },
                     xAxis: {
                         data: xAxisData,
                         axisLabel: {
                             inside: false,
                             color: '#000000',
-                            rotate: 60,
-                            interval: 0
+                            rotate: 45,
+                            interval: 0,
+                            formatter: function(value) {
+                                return value.length > 15 ? value.substring(0, 15) + '...' : value;
+                            }
                         },
                     },
                     series: [{name: 'TotalMsg', data: data}]
@@ -419,7 +438,7 @@ const DashboardPage = () => {
                     <Row gutter={[16, 16]}>
                         <Col span={12}>
                             <Card title={`${t.TOPIC} TOP 10`} bordered>
-                                <div ref={topicBarChartRef} style={{height: 300}}/>
+                                <div ref={topicBarChartRef} style={{height: 400}}/>
                             </Card>
                         </Col>
                         <Col span={12}>

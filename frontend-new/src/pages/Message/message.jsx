@@ -17,7 +17,7 @@
 
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, DatePicker, Form, Input, notification, Select, Spin, Table, Tabs, Typography} from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {SearchOutlined} from '@ant-design/icons';
 import {useLanguage} from '../../i18n/LanguageContext';
 import MessageDetailViewDialog from "../../components/MessageDetailViewDialog"; // Keep this path
@@ -35,8 +35,8 @@ const MessageQueryPage = () => {
 
     const [allTopicList, setAllTopicList] = useState([]);
     const [selectedTopic, setSelectedTopic] = useState(null);
-    const [timepickerBegin, setTimepickerBegin] = useState(moment().subtract(1, 'hour'));
-    const [timepickerEnd, setTimepickerEnd] = useState(moment());
+    const [timepickerBegin, setTimepickerBegin] = useState(dayjs().subtract(1, 'hour'));
+    const [timepickerEnd, setTimepickerEnd] = useState(dayjs());
     const [messageShowList, setMessageShowList] = useState([]);
     const [paginationConf, setPaginationConf] = useState({
         current: 1,
@@ -258,7 +258,7 @@ const MessageQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
+            render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
             title: 'Operation',
@@ -284,7 +284,7 @@ const MessageQueryPage = () => {
             dataIndex: 'storeTimestamp',
             key: 'storeTimestamp',
             align: 'center',
-            render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
+            render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
             title: 'Operation',
