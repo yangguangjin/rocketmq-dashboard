@@ -16,8 +16,28 @@
 # limitations under the License.
 #
 
+# 配置文件目录 (宿主机挂载目录)
+CONFIG_DIR=${CONFIG_DIR:-/home/rocketmq-dashboard/config}
+
 # 构建 Java 启动参数
 JAVA_ARGS=""
+
+# Spring Boot 外部配置文件加载
+# 优先级: 外部配置 > JAR 内部配置
+if [ -d "$CONFIG_DIR" ]; then
+    # 添加外部配置目录到 classpath，使 Spring Boot 能够加载外部配置
+    JAVA_ARGS="$JAVA_ARGS -Dspring.config.additional-location=file:$CONFIG_DIR/"
+
+    # logback.xml - 日志配置
+    if [ -f "$CONFIG_DIR/logback.xml" ]; then
+        JAVA_ARGS="$JAVA_ARGS -Dlogging.config=file:$CONFIG_DIR/logback.xml"
+    fi
+
+    # SSL 密钥库
+    if [ -f "$CONFIG_DIR/rmqcngkeystore.jks" ]; then
+        JAVA_ARGS="$JAVA_ARGS -Dserver.ssl.key-store=file:$CONFIG_DIR/rmqcngkeystore.jks"
+    fi
+fi
 
 # Server 配置
 [ -n "$SERVER_PORT" ] && JAVA_ARGS="$JAVA_ARGS -Dserver.port=$SERVER_PORT"
@@ -40,6 +60,10 @@ JAVA_ARGS=""
 [ -n "$ROCKETMQ_CONFIG_USETLS" ] && JAVA_ARGS="$JAVA_ARGS -Drocketmq.config.useTLS=$ROCKETMQ_CONFIG_USETLS"
 [ -n "$ROCKETMQ_CONFIG_PROXYADDR" ] && JAVA_ARGS="$JAVA_ARGS -Drocketmq.config.proxyAddr=$ROCKETMQ_CONFIG_PROXYADDR"
 [ -n "$ROCKETMQ_CONFIG_PROXYADDRS" ] && JAVA_ARGS="$JAVA_ARGS -Drocketmq.config.proxyAddrs=$ROCKETMQ_CONFIG_PROXYADDRS"
+
+echo "Starting rocketmq-dashboard with config dir: $CONFIG_DIR"
+echo "JAVA_OPTS: $JAVA_OPTS"
+echo "JAVA_ARGS: $JAVA_ARGS"
 
 # 启动应用
 exec java $JAVA_OPTS $JAVA_ARGS -jar /home/rocketmq-dashboard/rocketmq-dashboard.jar

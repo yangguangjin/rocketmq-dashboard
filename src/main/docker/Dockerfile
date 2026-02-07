@@ -29,6 +29,9 @@ COPY rocketmq-dashboard-*.jar rocketmq-dashboard.jar
 COPY entrypoint.sh entrypoint.sh
 RUN chmod 755 /home/rocketmq-dashboard/entrypoint.sh
 
+# 创建配置文件目录 (用于宿主机挂载)
+RUN mkdir -p /home/rocketmq-dashboard/config
+
 # 时区设置
 ENV TZ="Asia/Shanghai"
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
@@ -42,6 +45,9 @@ ENV CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 # 应用默认环境变量
 ENV SERVER_PORT=8082
 ENV JAVA_OPTS=""
+
+# 外部配置文件目录 (宿主机挂载此目录)
+ENV CONFIG_DIR=/home/rocketmq-dashboard/config
 
 # 数据目录
 VOLUME /tmp/rocketmq-console/data
