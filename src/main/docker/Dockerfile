@@ -15,9 +15,38 @@
 # limitations under the License.
 #
 
-FROM eclipse-temurin:17.0.16_8-jre-ubi9-minimal
-VOLUME /tmp
-ADD rocketmq-dashboard-*.jar rocketmq-dashboard.jar
-RUN sh -c 'touch /rocketmq-dashboard.jar'
+FROM 192.168.0.50:5000/application/ubuntu:24.04
+
+WORKDIR /home/rocketmq-dashboard
+
+# 添加 JDK
+ADD bellsoft-jdk25.0.2+12-linux-amd64-full.tar.gz .
+
+# 复制应用 JAR 包
+COPY rocketmq-dashboard-*.jar rocketmq-dashboard.jar
+
+# 复制启动脚本
+COPY entrypoint.sh entrypoint.sh
+RUN chmod 755 /home/rocketmq-dashboard/entrypoint.sh
+
+# 时区设置
+ENV TZ="Asia/Shanghai"
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo $TZ > /etc/timezone
+
+# JDK 环境变量
+ENV JAVA_HOME=/home/rocketmq-dashboard/jdk-25.0.2-full
+ENV PATH=$JAVA_HOME/bin:$PATH
+ENV CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+# 应用默认环境变量
+ENV SERVER_PORT=8082
 ENV JAVA_OPTS=""
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -jar /rocketmq-dashboard.jar" ]
+
+# 数据目录
+VOLUME /tmp/rocketmq-console/data
+
+# 使用非 root 用户运行
+USER 1000
+
+ENTRYPOINT ["/home/rocketmq-dashboard/entrypoint.sh"]
